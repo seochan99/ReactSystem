@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서울 대기환경 모아보기</title>
+</head>
+<body>
+    <!-- 출력할곳 -->
+    <div id="output">
+
+    </div>
+    
+</body>
+<script>
+    // api키 불러오기 
+    const apiKey = "616b707752676d6c3130304a6a6c7a54";
+    const apiURL = `http://openAPI.seoul.go.kr:8088/${apiKey}/json/RealtimeCityAir/1/55`
+    
+
+    // 출력할 HTML 요소 가져오기
+    const output = document.getElementById('output');
+     
+    // Fetch API 사용하여 API에서 데이터 가져오기 
+    fetch(apiURL)
+    .then(response=>response.json())
+    .then(data => {
+        
+        const items = data['RealtimeCityAir']['row'];
+        let html = '';
+        for(let i = 0;i<items.length;i++)
+        {
+            const item = items[i];
+            
+            const cityName = item['MSRSTE_NM'];
+            const airQuality = item['PM10'];
+            html += `<p>${cityName}: ${airQuality}</p>`
+        
+        }
+        output.innerHTML = html;
+    })
+    .catch(error => console.error(error));
+
+console.log(apiURL)
+</script>
+</html>

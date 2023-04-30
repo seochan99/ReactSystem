@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Seoul Air Quality API Example</title>
+</head>
+<body>
+  <div id="output"></div>
+
+  <script>
+    // API Key와 API URL을 변수에 할당
+    const apiKey = '616b707752676d6c3130304a6a6c7a54';
+    const apiUrl = `http://openAPI.seoul.go.kr:8088/${apiKey}/json/RealtimeCityAir/1/5/`;
+    
+    // 출력할 HTML 요소를 변수에 할당
+    const output = document.getElementById('output');
+
+    // Fetch API를 사용하여 API에서 데이터를 가져옴
+    console.log(apiUrl)
+    fetch(apiUrl)
+      .then(response => response.json()) // 응답 데이터를 JSON으로 변환
+      .then(data => {
+        console.log(data)
+        // API에서 가져온 JSON 데이터를 처리c하는 콜백 함수
+        const items = data['RealtimeCityAir']['row']; // row 태그를 찾음
+
+        let html = '';
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          const cityName = item['MSRSTE_NM']; // 도시 이름 추출
+          const airQuality = item['PM10']; // 대기오염 정보 추출
+          html += `<p>${cityName}: ${airQuality}</p>`; // HTML 문자열 생성
+        }
+
+        output.innerHTML = html; // 출력할 HTML 요소에 생성한 HTML 문자열을 할당
+      })
+      .catch(error => console.error(error)); // 에러 발생 시 콘솔에 에러 로그 출력
+  </script>
+</body>
+</html>

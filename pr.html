@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미세먼지 화면 만들기</title>
+    <style>
+        .line{
+            border-bottom: 1px solid #444444;
+        }
+        .lcolor_r{
+            color:red;
+            font-weight: bold;
+        }
+        .lcolor_b{
+            color: blue;
+            font-weight: bold;
+        }
+        td{
+            padding: 5px;
+        }
+        th{
+            padding: 5px;
+            border-bottom: 3px solid #444444;
+        }
+    </style>
+    <script>
+        function load(){
+            const con = confirm("데이터를 불러오시겠습니까?");
+            if( con === false){
+                console.error("데이터를 불러오지 않습니다");
+                return;
+            }
+            console.log("데이터를 불러옵니다");
+            fetch("http://openapi.seoul.go.kr:8088/737a6d746575726939324748735059/json/RealtimeCityAir/1/25/")
+            .then(function(res){
+                res.json().then( function(res2){
+                    //console.log(res2); //res2: Realtimecityair
+                    //alert(res2.RealtimeCityAir.RESULT.MESSAGE); // 정상 처리되었습니다.
+                    alert(res2.RealtimeCityAir.row[0].MSRSTE_NM + "에 오신 것을 환영합니다"); //중구에 오신 것을 환영합니다.
+                    let i=0;
+                    let j=0;
+                    let temp = 0;
+                    const arr = [];
+                    for(j=0; j<25; j++){
+                        arr[j] = res2.RealtimeCityAir.row[j].IDEX_MVL;
+                    }
+                    arr.sort();
+                    console.log(arr);
+                   
+                    for(i=0; i<25; i++){
+                        if(i === 2||i===5||i===13||i===20||i===24){
+                        
+                            document.getElementById("data").innerHTML = document.getElementById("data").innerHTML +
+                            `
+                            <tr >
+                                <td class = "line" id = "lcolor">${res2.RealtimeCityAir.row[i].MSRSTE_NM}</td >
+                                <td class = "line">${res2.RealtimeCityAir.row[i].PM10}</td >
+                                <td class = "line">${res2.RealtimeCityAir.row[i].PM25}</td >
+                                <td class = "line">${res2.RealtimeCityAir.row[i].O3}</td >
+                                <td class = "line">${res2.RealtimeCityAir.row[i].SO2}</td>
+                                <td id = "d_five"></td>
+                                <td>${res2.RealtimeCityAir.row[i].IDEX_MVL}</td>
+                            </tr>
+                            `;
+
+                            let d_five = document.getElementById("d_five");
+                            if(res2.RealtimeCityAir.row[i].IDEX_NM === "나쁨"){
+                                d_five.outerHTML
+                                = `<td style = "background-color: red"></td>`;
+                                
+                            }else if(res2.RealtimeCityAir.row[i].IDEX_NM === "보통"){
+                                d_five.outerHTML
+                                = `<td style = "background-color: blue"></td>`;
+                            }else if(res2.RealtimeCityAir.row[i].IDEX_NM === "좋음"){
+                                d_five.outerHTML
+                                = `<td style = "background-color: green"></td>`;
+                            }
+                            let l_color = document.getElementById("lcolor");
+                            
+                            if(res2.RealtimeCityAir.row[i].IDEX_MVL >= arr[0] && res2.RealtimeCityAir.row[i].IDEX_MVL < arr[5]){
+                                l_color.outerHTML = `<td class = "line lcolor_b">${res2.RealtimeCityAir.row[i].MSRSTE_NM} </td>`;
+                            }else if(res2.RealtimeCityAir.row[i].IDEX_MVL >= arr[20] && res2.RealtimeCityAir.row[i].IDEX_MVL < arr[24]){
+                                l_color.outerHTML = `<td class = "line lcolor_r">${res2.RealtimeCityAir.row[i].MSRSTE_NM} </td>`;
+                            }
+                                
+
+
+                            
+                            
+                        }else{
+                            
+                            document.getElementById("data").innerHTML = document.getElementById("data").innerHTML +
+                            `
+                            <tr >
+                                <td id = "lcolor">${res2.RealtimeCityAir.row[i].MSRSTE_NM}</td>
+                                <td>${res2.RealtimeCityAir.row[i].PM10}</td>
+                                <td>${res2.RealtimeCityAir.row[i].PM25}</td>
+                                <td>${res2.RealtimeCityAir.row[i].O3}</td>
+                                <td>${res2.RealtimeCityAir.row[i].SO2}</td>
+                                <td id = "d_five"></td>
+                                <td>${res2.RealtimeCityAir.row[i].IDEX_MVL}</td>
+                            </tr>
+                            `;
+
+                        let d_five = document.getElementById("d_five");
+                            if(res2.RealtimeCityAir.row[i].IDEX_NM === "나쁨"){
+                                d_five.outerHTML
+                                = `<td style = "background-color: red"></td>`;
+                                
+                            }else if(res2.RealtimeCityAir.row[i].IDEX_NM === "보통"){
+                                d_five.outerHTML
+                                = `<td style = "background-color: blue"></td>`;
+                            }else if(res2.RealtimeCityAir.row[i].IDEX_NM === "좋음"){
+                                d_five.outerHTML
+                                = `<td style = "background-color: green"></td>`;
+                            }
+                            let l_color = document.getElementById("lcolor");
+                            if(res2.RealtimeCityAir.row[i].IDEX_MVL >= arr[0] && res2.RealtimeCityAir.row[i].IDEX_MVL < arr[5]){
+
+                                
+                                l_color.outerHTML = `<td class = "lcolor_b">${res2.RealtimeCityAir.row[i].MSRSTE_NM} </td>`;
+                            }else if(res2.RealtimeCityAir.row[i].IDEX_MVL >= arr[20] && res2.RealtimeCityAir.row[i].IDEX_MVL < arr[24]){
+                                l_color.outerHTML = `<td class = "lcolor_r">${res2.RealtimeCityAir.row[i].MSRSTE_NM} </td>`;
+                            }
+                        }
+
+                    }
+                    
+                    
+                 });
+                console.log(res);
+            });
+            
+        }
+    
+    </script>
+</head>
+<body>
+    <button onclick="load()">데이터 불러오기</button>
+    <table>
+        <thead>
+            <th>지역명</th>
+            <th>PM10</th>
+            <th>PM25</th>
+            <th>O3</th>
+            <th>SO2</th>
+            <th>구분</th>
+            <th>IDEX_MVL</th>
+        </thead>
+        <tbody id="data" >
+            <!-- <tr>
+                <td>중구</td>
+                <td>26</td>
+                <td>13</td>
+                <td>0.049</td>
+                <td>0.003</td>
+            </tr> -->
+        </tbody>
+    </table>
+</body>
+</html>
