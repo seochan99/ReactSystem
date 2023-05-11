@@ -56,7 +56,7 @@ function Worldcup() {
     if(game.length === 0 || round + 1 > game.length /2) return <div>loading...</div>
   return (
     <div style={{textAlign:'center', zoom:0.5, margin:300}}>
-        <h1>Worldcup {round + 1} / {game.length/2} <b>{game.length}강</b></h1>
+        <h1>Worldcup {round + 1} / {game.length/2} <b>{game.length === 2 ? 결승 : game.length+"강"}</b></h1>
         <div style={{display : 'flex', flexDirection:'row' }}>
             {/* <imgt src={game[0].src}/>
             error가 발생함 -> 처음에는게임이 빈 배열이기에... game[0]이 없음 */}
