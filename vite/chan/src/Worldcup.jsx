@@ -52,11 +52,18 @@ function Worldcup() {
 
     },[round])
 
+    // 결승자 출력
+    if(game.length === 1){
+        return <div style={{textAlign:'center', margin:'100'}}>
+            <p>이상형 월드컵 우승</p>
+            <img src={game[0].src} style={{width:"30%"}}/><p>{game[0].name}/</p>
+            </div>
+    }
 
     if(game.length === 0 || round + 1 > game.length /2) return <div>loading...</div>
   return (
     <div style={{textAlign:'center', zoom:0.5, margin:300}}>
-        <h1>Worldcup {round + 1} / {game.length/2} <b>{game.length === 2 ? 결승 : game.length+"강"}</b></h1>
+        <h1>Worldcup {round + 1} / {game.length/2} <b>{game.length === 2 ? "결승" : game.length+"강"}</b></h1>
         <div style={{display : 'flex', flexDirection:'row' }}>
             {/* <imgt src={game[0].src}/>
             error가 발생함 -> 처음에는게임이 빈 배열이기에... game[0]이 없음 */}
