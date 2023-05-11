@@ -10,7 +10,7 @@ export default function Counter() {
         // setCount(prevCount => prevCount + 1);
     };
     const onDecrease = () => {
-        count = count - 1;
+        // count = count - 1;
         // setCount(count-1);
         // setCount(prevCount => prevCount - 1);
     };
