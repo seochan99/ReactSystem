@@ -30,8 +30,28 @@ function Worldcup() {
     // 다음 게임 배열
     const [nextGame,setNextGame] = useState([]);
 
+    // 
+    const [stat,setStat] = useState({
+        "swift" : 0,
+        "java" : 0,
+        "react" : 0,
+        "cote" : 0,
+        "cpp" : 0,
+        "js" : 0,
+        "nexon" : 0,
+        "jss" : 0,
+
+    });
+
+
     // 첫 시작시 
     useEffect(()=>{
+        const munja = localStorage.getItem("월드컵");
+        // 데이터가 없을때..
+        if( munja !== null){
+            // null이 아닐때 parse진행
+            setStat(JSON.parse(munja));
+        }
         // 전체 배열에 게임 배열 넣어주기 
         setGame(candidate.map( c =>{
             return {name : c.name, src : c.src, order: Math.random()}
@@ -54,13 +74,58 @@ function Worldcup() {
 
     // 결승자 출력
     if(game.length === 1){
+        localStorage.setItem("월드컵",JSON.stringify(stat));
         return <div style={{textAlign:'center', margin:'100'}}>
             <p>이상형 월드컵 우승</p>
             <img src={game[0].src} style={{width:"30%"}}/><p>{game[0].name}/</p>
+            <table>
+                {game.map(item =>{
+                    return <tr key={item.name}>
+                        <td>{item.name}</td>
+                        <td>{stat[item.name]}</td>
+                    </tr>
+                })}
+            </table>
             </div>
     }
 
     if(game.length === 0 || round + 1 > game.length /2) return <div>loading...</div>
+    const left = round *2, right = round * 2 + 1;
+
+    const leftFunction = () =>{
+        console.log("LEFT FUNCTION");
+        
+        // 나머지 스탯은 동일
+        // 이전꺼에서 한개 업
+        setStat({
+            ...stat,
+            [game[left].name] : prevStat[game[left].name] + 1
+        });
+
+
+
+
+        // setStat((prevStat)=> {
+        //     prevStat[game[left].name] = prevStat[game[left].name] + 1;
+        //     return prevStat;
+        // }
+        // );
+
+
+        setNextGame((prev)=>prev.concat(game[left]))
+        setRound(round => round + 1);
+    }
+
+    const rightFunction = () =>{
+        setStat((prevStat)=> 
+        {
+            prevStat[game[right].name] = prevStat[game[right].name] + 1;
+        }
+        );
+        setNextGame((prev)=> prev.concat(game[right]));
+            setRound(round => round + 1);
+    };
+
   return (
     <div style={{textAlign:'center', zoom:0.5, margin:300}}>
         <h1>Worldcup {round + 1} / {game.length/2} <b>{game.length === 2 ? "결승" : game.length+"강"}</b></h1>
@@ -68,14 +133,14 @@ function Worldcup() {
             {/* <imgt src={game[0].src}/>
             error가 발생함 -> 처음에는게임이 빈 배열이기에... game[0]이 없음 */}
       
-            <img src={game[round*2].src} onClick={()=>{
-                setNextGame((prev)=>prev.concat(game[round*2]))
-                    setRound(round => round + 1);
+            <img src={game[left].src} onClick={()=>{
+                alert(game[left].name + "를 선택하였습니다.");
+                leftFunction();
             }}/>
             
-            <img src={game[round*2 + 1].src} onClick={()=>{
-                setNextGame((prev)=> prev.concat(game[round*2 + 1]));
-                    setRound(round => round + 1);
+            <img src={game[right].src} onClick={()=>{
+                alert(game[right].name + "를 선택하였습니다.");
+                rightFunction();
             }}/>
 
             {/* <img src={swift} onClick={()=> alert('SWIFT')}/>

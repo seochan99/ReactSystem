@@ -3,6 +3,22 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+import React, { Component } from 'react'
+
+export default class App extends Component {
+  componentDidUpdate() {
+    
+  }
+  
+  }
+  render() {
+    return (
+      <div>App</div>
+    )
+  }
+}
+
+
 function App() {
   const [count, setCount] = useState(0)
 
