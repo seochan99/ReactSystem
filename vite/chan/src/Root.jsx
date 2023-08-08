@@ -26,6 +26,7 @@ function Root() {
                     color: URL.includes("login") ? "red" : "black",
                             }} 
             to="/login">로그인</Link>
+            
                 <Link to="/worldcup">월드컵</Link>
                 <Link to="/about">소개</Link>
                 {/* Link 태그 권장 */}

@@ -5,6 +5,7 @@ import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Root from './Root.jsx'
 import About from './about.jsx'
 import Misae from './Misae.jsx'
+import { RecoilRoot } from 'recoil'
 
 const router = createBrowserRouter(
   [
@@ -47,6 +48,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <RecoilRoot>
     <RouterProvider router={router}/>
+    </RecoilRoot>
   </React.StrictMode>,
 )
